@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="dashboard-body row">
+        <div class="dashboard-side col-md-3">
+            <div class="list-group mb-2">
+                <h5>Deadline</h5>
+                <a href="{{ url_for('project.tasks_today') }}" class="list-group-item list-group-item-action">Today</a>
+                <a href="{{ url_for('project.tasks_this_week') }}" class="list-group-item list-group-item-action">This week</a>
+                <a href="{{ url_for('project.tasks_next_week') }}" class="list-group-item list-group-item-action">Next Week</a>
+                <a href="{{ url_for('index') }}" class="list-group-item list-group-item-action">Inbox</a>
+            </div>
+            <div class="list-group">
+                <div class="project-title d-flex align-items-center mb-1">
+                    <h5>Projects</h5> 
+                    {% include "partials/create_project_modal.html" %}
+                </div>
+
+                {% for project in projects %}
+                <a href="{{ url_for('project.project_detail', project_id=project.id) }}" class="list-group-item list-group-item-action">{{ project.name }}</a>
+                {% endfor %}
+
+            
+            </div>
+        </div>
+        <div class="dashboard-main col-md-9">
+            <ul class="list-group">
+                <div class="task-title d-flex align-items-center my-1">
+                        {% if project %}
+                            <h5>{{project.name}}</h5> {% include "partials/create_task_modal.html" %}
+                        {% elif deadline %}
+                            <h5>{{ deadline }}</h5>
+                        {% else %}
+                            <h5>Inbox</h5>
+                        {% endif %}
+                    
+                </div> 
+                {% for task in tasks %}
+                <li class="list-group-item">
+                  <input class="form-check-input me-1 task-inputs" id="{{ task.id }}" type="radio" name="listGroupRadio" value="">
+                  <label class="form-check-label" for="firstRadio">{{ task.body }}</label>
+                </li>
+                {% endfor %}
+                
+              </ul>
+        </div>
+
+        
+    </div>
+
+    <script>
+        const taskInputs = document.querySelectorAll(".task-inputs");
+
+        taskInputs.forEach(taskInput => {
+            taskInput.addEventListener("click", async (e) => {
+                e.preventDefault()
+                const task_id = e.target.id
+                console.log(task_id)
+
+                try {
+                    const res = await fetch(`/projects/tasks/${task_id}/delete`, {
+                        method: "POST"
+                    })
+                    location.reload()
+                } catch(err) {
+                    console.log(err)
+                }
+
+            })
+        })
+    </script>
+{% endblock %}

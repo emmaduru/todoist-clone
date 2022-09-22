@@ -1,0 +1,53 @@
+<div class="dropdown ms-auto">
+    <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-ellipsis-vertical text-muted"></i>
+    </a>
+    <ul class="dropdown-menu">
+        <li>
+            <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#createTaskModal">
+                Add Task
+            </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="#">Delete Project</a></li>
+    </ul>
+  </div>
+
+  
+  
+<div class="modal fade" id="createTaskModal" tabindex="-1" aria-labelledby="createTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="createTaskModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{{ url_for('project.create_task', project_id=project.id) }}" method="post">
+            {{ task_creation_form.hidden_tag() }}
+            <div class="modal-body">
+                <p>
+                    {{ task_creation_form.body.label }} <br>
+                    {{ task_creation_form.body(class_="form-control") }} <br>
+                    {% for error in task_creation_form.body.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ task_creation_form.deadline.label }} <br>
+                    {{ task_creation_form.deadline(class_="form-control") }} <br>
+                    {% for error in task_creation_form.deadline.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+                <p>
+                    {{ task_creation_form.submit(class_="btn btn-danger")}}
+                </p>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>
+    

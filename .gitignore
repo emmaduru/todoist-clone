@@ -1,0 +1,3 @@
+todoist/todoist.db
+migrations/
+.flaskenv
